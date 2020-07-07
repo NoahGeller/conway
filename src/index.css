@@ -1,0 +1,14 @@
+:root {
+    font-size: 18px;
+    font-family: sans-serif;
+    --bg-primary: #000000;
+    --fg-primary: #ffffff;
+    --fg-secondary: #303030;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--fg-primary);
+    margin: 0;
+    padding: 0;
+}
