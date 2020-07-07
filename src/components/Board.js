@@ -74,7 +74,7 @@ function Board(props) {
             }
             return divs;
         });
-    }, [dots, props.cellSize, props.height, props.width]);
+    }, [dots, props.cellSize, props.height, props.width, gridlines]);
 
 
     // 
