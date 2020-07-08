@@ -17,8 +17,12 @@ function ControlPanel(props) {
                 Randomize
             </button>
             <div className='gridlines-checkbox'>
-                <input type='checkbox' name='gridlines' onChange={props.toggleGridlines} />
-                <label for='gridlines'>Gridlines</label>
+                <input
+                    type='checkbox'
+                    onChange={props.toggleGridlines}
+                    checked
+                    />
+                <label>Gridlines</label>
             </div>
             <div className='slider'>
                 Delay: {props.delay} ms
@@ -46,6 +50,7 @@ function ControlPanel(props) {
                     onAfterChange={val => props.updateDensity((10 - val) / 10)}
                     />
             </div>
+            Press + to zoom in, - to zoom out while paused.
         </div>
     );
 }

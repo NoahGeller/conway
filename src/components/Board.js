@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 import ControlPanel from './ControlPanel';
 
@@ -26,7 +26,7 @@ function useInterval(callback, delay) {
 
 function Board(props) {
 
-    const makeEmptyBoard = () => {
+    const makeEmptyBoard = useCallback(() => {
         let board = []
         for (let x = 0; x < props.width; x++) {
             board.push([]);
@@ -35,22 +35,25 @@ function Board(props) {
             }
         }
         return board;
-    }
+    }, [props.width, props.height]);
 
     const [dots, setDots] = useState(makeEmptyBoard());
     const [lastDots, setLastDots] = useState();
     const [overlay, setOverlay] = useState();
-    const [running, setRunning] = useState(false);
     const [delay, setDelay] = useState(100);
     const [generations, setGenerations] = useState(0);
     const [density, setDensity] = useState(0.6);
-    const [gridlines, setGridlines] = useState(false);
+    const [gridlines, setGridlines] = useState(true);
+
+    useEffect(() => {
+        setDots(makeEmptyBoard());
+    }, [props.cellSize, props.height, props.width, makeEmptyBoard])
 
     useEffect(() => {
         setOverlay(() => {
             let divs = [];
-            for (let x = 0; x < props.width; x++) {
-                for (let y = 0; y < props.height; y++) {
+            for (let x = 0; x < dots.length; x++) {
+                for (let y = 0; y < dots[0].length; y++) {
                     if (dots[x][y]) {
                         divs.push(
                             <div
@@ -93,8 +96,8 @@ function Board(props) {
         for (let a = -1; a < 2; a++) {
             for (let b = -1; b < 2; b++) {
                 if (a === 0 && b === 0) continue;
-                else if (x + a < 0 || x + a >= props.width ||
-                         y + b < 0 || y + b >= props.height) continue;
+                else if (x + a < 0 || x + a >= dots.length ||
+                         y + b < 0 || y + b >= dots[0].length) continue;
                 else if (dots[x+a][y+b]) num++;
             }
         }
@@ -121,7 +124,7 @@ function Board(props) {
         }
 
         if (dead) {
-            setRunning(false);    
+            props.setRunning(false);    
         } else {
             setLastDots(dots);
             setDots(newDots);
@@ -129,7 +132,7 @@ function Board(props) {
         }
     }
 
-    useInterval(() => step(), running ? delay : null);
+    useInterval(() => step(), props.running ? delay : null);
 
     const handleClick = (e) => {
         let x = Math.floor(e.nativeEvent.offsetX / props.cellSize);
@@ -138,21 +141,21 @@ function Board(props) {
     }
 
     const reset = () => {
-        setRunning(false);
+        props.setRunning(false);
         setDots(makeEmptyBoard());
         setGenerations(0);
     }
 
     const start = () => {
-        setRunning(true);
+        props.setRunning(true);
     }
 
     const stop = () => {
-        setRunning(false);
+        props.setRunning(false);
     }
 
     const randomize = () => {
-        setRunning(false);
+        props.setRunning(false);
         let newDots = makeEmptyBoard();
         for (let x = 0; x < props.width; x++) {
             for (let y = 0; y < props.height; y++) {
@@ -164,7 +167,7 @@ function Board(props) {
         }
         setDots(newDots);
         setGenerations(0);
-        if (running) setRunning(true);
+        if (props.running) props.setRunning(true);
     }
 
     return (
@@ -189,7 +192,7 @@ function Board(props) {
                 Number of generations: {generations}.
             </div>
             <ControlPanel
-                running={running}
+                running={props.running}
                 gridlines={gridlines}
                 toggleGridlines={() => setGridlines(gridlines ? false : true)}
                 delay={delay}
