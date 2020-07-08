@@ -16,6 +16,10 @@ function ControlPanel(props) {
             <button onClick={props.randomize}>
                 Randomize
             </button>
+            <div className='gridlines-checkbox'>
+                <input type='checkbox' name='gridlines' onChange={props.toggleGridlines} />
+                <label for='gridlines'>Gridlines</label>
+            </div>
             <div className='slider'>
                 Delay: {props.delay} ms
                 <Slider

@@ -25,6 +25,17 @@
     background-color: lightgreen;
 }
 
+.controls .gridlines-checkbox {
+    margin: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.controls .gridlines-checkbox input {
+    margin: 0 0.5rem 0 0;
+}
+
 .slider {
     width: 20%;
     margin: 0.5rem auto;

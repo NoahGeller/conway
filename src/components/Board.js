@@ -190,6 +190,8 @@ function Board(props) {
             </div>
             <ControlPanel
                 running={running}
+                gridlines={gridlines}
+                toggleGridlines={() => setGridlines(gridlines ? false : true)}
                 delay={delay}
                 density={density}
                 reset={reset}
